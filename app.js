@@ -22,13 +22,46 @@ const artcleSchema = {
 //Article  model create
 const Article = mongoose.model("Article", artcleSchema);
 
-
+//GET ROUTE
 app.get("/articles", function(req, res){
   Article.find(function(err, foundArticles){
     if (!err){
       res.send(foundArticles);
     }
     else{
+      res.send(err);
+    }
+  });
+});
+
+
+//POST ROUTE
+app.post("/articles", function(req, res){
+
+  const newArticle = new Article({
+    title: req.body.title,
+    content: req.body.content
+  });
+
+  newArticle.save(function(err){
+    if (!err){
+      res.send("successfully added a new article");
+    }
+    else {
+      res.send(err);
+    }
+  });
+
+});
+
+
+//DELETE ROUTE
+
+app.delete("/articles", function(req, res){
+  Article.deleteMany(function(err){
+    if (!err){
+      res.send("successfully deleted all the articles.");
+    } else {
       res.send(err);
     }
   });
