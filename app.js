@@ -11,6 +11,28 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(express.static("public"));
 
+mongoose.connect("mongodb://localhost:27017/wikiDB", {useNewUrlParser: true});
+
+//Schema create
+const artcleSchema = {
+  title : String,
+  content: String
+}
+
+//Article  model create
+const Article = mongoose.model("Article", artcleSchema);
+
+
+app.get("/articles", function(req, res){
+  Article.find(function(err, foundArticles){
+    if (!err){
+      res.send(foundArticles);
+    }
+    else{
+      res.send(err);
+    }
+  });
+});
 
 
 //server port listen
