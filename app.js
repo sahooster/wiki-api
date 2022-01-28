@@ -22,8 +22,12 @@ const artcleSchema = {
 //Article  model create
 const Article = mongoose.model("Article", artcleSchema);
 
-//GET ROUTE
-app.get("/articles", function(req, res){
+
+
+////////////////////////// REQUEST TARGETING ALL ARTICLES/////////////////////
+app.route("/articles")
+
+.get(function(req, res){
   Article.find(function(err, foundArticles){
     if (!err){
       res.send(foundArticles);
@@ -32,11 +36,9 @@ app.get("/articles", function(req, res){
       res.send(err);
     }
   });
-});
+})
 
-
-//POST ROUTE
-app.post("/articles", function(req, res){
+.post(function(req, res){
 
   const newArticle = new Article({
     title: req.body.title,
@@ -52,12 +54,9 @@ app.post("/articles", function(req, res){
     }
   });
 
-});
+})
 
-
-//DELETE ROUTE
-
-app.delete("/articles", function(req, res){
+.delete(function(req, res){
   Article.deleteMany(function(err){
     if (!err){
       res.send("successfully deleted all the articles.");
@@ -66,6 +65,20 @@ app.delete("/articles", function(req, res){
     }
   });
 });
+
+
+////////////////////////// REQUEST TARGETING A SPECIFIC ARTICLE////////////////
+app.route("/articles/:articleTitle")
+
+.get(function(req, res){
+  Article.findOne({title: req.params.articleTitle}, function(req, foundArticle){
+    if (foundArticle){
+      res.send(foundArticle);
+    } else {
+      res.send("no articles matching that title was found");
+    }
+  });
+})
 
 
 //server port listen
